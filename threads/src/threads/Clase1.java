@@ -9,9 +9,9 @@ public class Clase1 {
 static class Hilo extends Thread {
 		
 		// VARIABLES A CAMBIAR DEPENDIENDO DE LA BASE DE DATOS. //
-		private String URL = "jdbc:postgresql://localhost:5432/hilos";
+		private String URL = "jdbc:postgresql://localhost:5432/sakila";
 		private String USER = "postgres";
-		private String CLAVE = "123";
+		private String CLAVE = "admin";
 		private Connection conn;
 		private static int hilos_fallados = 0, hilos_funcionando = 0;
         
@@ -25,7 +25,7 @@ static class Hilo extends Thread {
                     Statement st = conn.createStatement();
                     st.setFetchSize(0);
                     
-                    ResultSet rs = st.executeQuery("SELECT * FROM prueba;");
+                    ResultSet rs = st.executeQuery("SELECT * FROM actor;");
                     while(rs.next()) {
                     	
                     	System.out.print(rs.getString(1) + "  ");
@@ -72,10 +72,10 @@ public static void main(String[] args) {
 			
 			
 			for (int i = 0; i < 5; i++) {
-			    times[i] = System.currentTimeMillis();
+			    times[i] -= System.currentTimeMillis();
 			}
 			
-        	for (int i = 1; i <= 100000; i++){
+        	for (int i = 1; i <= 1000; i++){
             	Hilo hilo = new Hilo();
             	hilo.start();
             	
@@ -88,7 +88,7 @@ public static void main(String[] args) {
 					}
                     cantidad_funcionando[0] = Hilo.getHilosCompletados();
                     cantidad_fallados[0] = Hilo.getHilosFallados();
-                    times[0] -= System.currentTimeMillis();
+                    times[0] += System.currentTimeMillis();
                     break;
                 case 100:
 					try {
@@ -98,7 +98,7 @@ public static void main(String[] args) {
 					}
                     cantidad_funcionando[1] = Hilo.getHilosCompletados();
                     cantidad_fallados[1] = Hilo.getHilosFallados();
-                    times[1] -= System.currentTimeMillis();
+                    times[1] += System.currentTimeMillis();
                     break;
                 case 1000:
 					try {
@@ -108,7 +108,7 @@ public static void main(String[] args) {
 					}
                     cantidad_funcionando[2] = Hilo.getHilosCompletados();
                     cantidad_fallados[2] = Hilo.getHilosFallados();
-                    times[2] -= System.currentTimeMillis();
+                    times[2] += System.currentTimeMillis();
                     break;
                 case 10000:
 					try {
@@ -118,10 +118,10 @@ public static void main(String[] args) {
 					}
                     cantidad_funcionando[3] = Hilo.getHilosCompletados();
                     cantidad_fallados[3] = Hilo.getHilosFallados();
-                    times[3] -= System.currentTimeMillis();
+                    times[3] += System.currentTimeMillis();
                     break;
                 case 100000:
-                    times[4] -= System.currentTimeMillis();
+                    times[4] += System.currentTimeMillis();
                     break;
             	}
             }
