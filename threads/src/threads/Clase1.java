@@ -1,5 +1,6 @@
 package threads;
 
+
 // Imports necesarios para la ejeccución con la base de datos //
 
 import java.sql.*;
@@ -7,7 +8,7 @@ import java.sql.*;
 public class Clase1 {
 	
 static class Hilo extends Thread {
-		
+	
 		// VARIABLES A CAMBIAR DEPENDIENDO DE LA BASE DE DATOS. //
 		private String URL = "jdbc:postgresql://localhost:5432/sakila";
 		private String USER = "postgres";
@@ -88,15 +89,22 @@ public static void main(String[] args) {
 				System.out.println("prueba 2");
 				int numero_hilos_int = Integer.valueOf(numero_hilos);
 				
+				Hilo hilos[] = new Hilo[numero_hilos_int];
+				
 				for (int j = 0; j<numero_hilos_int;j++) {
 					Hilo hilo = new Hilo();
 					hilo.start();
+					hilos[j]= hilo;
+				}
+				
+				// uso de for each con arreglo de hilos para permitir
+				// que terminen los hilos y luego continúe el código
+				for (Hilo hilo : hilos) {
 					try {
-	            		//Thread.sleep(10000);
-	                	hilo.join();
-	            	}catch(InterruptedException e) {
-	            		e.printStackTrace();
-	            	}
+						hilo.join();
+		        	}catch(InterruptedException e) {
+		        		e.printStackTrace();
+		        	}
 				}
 				
                 cantidad_funcionando[i] = Hilo.getHilosCompletados();
@@ -104,6 +112,13 @@ public static void main(String[] args) {
                 times[i] += System.currentTimeMillis();
 				
 			}
+			
+			/*try {
+        		Thread.sleep(10000);
+        	}catch(InterruptedException e) {
+        		e.printStackTrace();
+        	}*/
+			
 			System.out.println("prueba 3");
 			
         	/*for (int i = 1; i <= 1000; i++){
