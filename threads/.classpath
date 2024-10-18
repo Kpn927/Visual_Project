@@ -6,7 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/danie/Documents/GitHub/Visual_Project/threads/postgresql-42.7.4.jar">
+	<classpathentry kind="lib" path="C:/Users/angel/Desktop/Visual/Visual_Project/threads/postgresql-42.7.4.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

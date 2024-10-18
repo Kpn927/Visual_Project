@@ -25,7 +25,7 @@ static class Hilo extends Thread {
                     Statement st = conn.createStatement();
                     st.setFetchSize(0);
                     
-                    ResultSet rs = st.executeQuery("SELECT * FROM actor;");
+                    ResultSet rs = st.executeQuery("SELECT * FROM actor LIMIT 1;");
                     while(rs.next()) {
                     	
                     	System.out.print(rs.getString(1) + "  ");
@@ -56,11 +56,15 @@ static class Hilo extends Thread {
         
         // OBTENER LOS HILOS QUE ESTAN FALLANDO.
         public static int getHilosFallados() {
-            return hilos_fallados;
+        	int hilos_fallados_return = hilos_fallados;
+        	hilos_fallados=0;
+            return hilos_fallados_return;
         }
 
         public static int getHilosCompletados() {
-            return hilos_funcionando;
+        	int hilos_completados_return = hilos_funcionando;
+        	hilos_funcionando=0;
+            return hilos_completados_return;
         }
     }
 	
@@ -71,11 +75,38 @@ public static void main(String[] args) {
 			long[] times = new long[5];
 			
 			
-			for (int i = 0; i < 5; i++) {
+			/*for (int i = 0; i < 5; i++) {
 			    times[i] -= System.currentTimeMillis();
-			}
+			}*/
 			
-        	for (int i = 1; i <= 1000; i++){
+			String numero_hilos = "1";
+			System.out.println("prueba 1");
+			
+			for (int i = 0; i<3; i++) {
+				times[i] -= System.currentTimeMillis();
+				numero_hilos+= "0";
+				System.out.println("prueba 2");
+				int numero_hilos_int = Integer.valueOf(numero_hilos);
+				
+				for (int j = 0; j<numero_hilos_int;j++) {
+					Hilo hilo = new Hilo();
+					hilo.start();
+					try {
+	            		//Thread.sleep(10000);
+	                	hilo.join();
+	            	}catch(InterruptedException e) {
+	            		e.printStackTrace();
+	            	}
+				}
+				
+                cantidad_funcionando[i] = Hilo.getHilosCompletados();
+                cantidad_fallados[i] = Hilo.getHilosFallados();
+                times[i] += System.currentTimeMillis();
+				
+			}
+			System.out.println("prueba 3");
+			
+        	/*for (int i = 1; i <= 1000; i++){
             	Hilo hilo = new Hilo();
             	hilo.start();
             	
@@ -130,7 +161,7 @@ public static void main(String[] args) {
         		Thread.sleep(5000);
         	}catch(InterruptedException e) {
         		e.printStackTrace();
-        	}
+        	}*/
 
         	System.out.println("FUNCIONAMIENTOl " + "Completados " + " l " + "Fallados" + " l " + "Tiempo " + "(ms)");
         	System.out.println("10 HILOS      l " + cantidad_funcionando[0] + " l " + cantidad_fallados[0] + " l " + times[0] + "ms");
