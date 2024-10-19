@@ -7,14 +7,14 @@ public class Clase1 {
 	
 	public static void main(String[] args) {
 				
-			int[] cantidad_funcionando = new int[4];
-			int[] cantidad_fallados = new int[4];
+			int[] cantidad_funcionando = new int[5];
+			int[] cantidad_fallados = new int[5];
 			long[] times = new long[5];
 			
 			
 			String numero_hilos = "1";
 			
-			for (int i = 0; i<3; i++) {
+			for (int i = 0; i<5; i++) {
 				times[i] -= System.currentTimeMillis();
 				numero_hilos+= "0";
 				int numero_hilos_int = Integer.valueOf(numero_hilos);
@@ -43,20 +43,13 @@ public class Clase1 {
                 times[i] += System.currentTimeMillis();
 				
 			}
-			
-			/*try {
-				Thread.sleep(0);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}*/
-			
 
         	System.out.println("FUNCIONAMIENTOl " + "Completados " + " l " + "Fallados" + " l " + "Tiempo " + "(ms)");
         	System.out.println("10 HILOS      l " + cantidad_funcionando[0] + " l " + cantidad_fallados[0] + " l " + times[0] + "ms");
         	System.out.println("100 HILOS     l " + cantidad_funcionando[1] + " l " + cantidad_fallados[1] + " l " + times[1] + "ms");
         	System.out.println("1000 HILOS    l " + cantidad_funcionando[2] + " l " + cantidad_fallados[2] + " l " + times[2] + "ms");
         	System.out.println("10000 HILOS   l " + cantidad_funcionando[3] + " l " + cantidad_fallados[3] + " l " + times[3] + "ms");
-        	System.out.println("100000 HILOS  l " + Hilo.getHilosCompletados() + " l " + Hilo.getHilosFallados() + " l " + times[4] + "ms");
+        	System.out.println("100000 HILOS  l " + cantidad_funcionando[4] + " l " + cantidad_fallados[4] + " l " + times[4] + "ms");
 	}
 }
 
