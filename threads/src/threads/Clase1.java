@@ -86,11 +86,9 @@ static class Hilo extends Thread {
 				
 			}
 			
-			System.out.println("prueba 3");
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(1500);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
