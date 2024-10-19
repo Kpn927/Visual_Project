@@ -1,3 +1,4 @@
 /.metadata/
 threads/.classpath
 threads/bin/
+threads/bin/*
