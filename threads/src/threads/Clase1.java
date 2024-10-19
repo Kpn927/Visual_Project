@@ -5,46 +5,6 @@ package threads;
 
 public class Clase1 {
 	
-static class Hilo extends Thread {
-		
-		private static int hilos_fallados = 0, hilos_funcionando = 0;
-        
-        // se utiliza @OVERRIDE RUN Para sobre escribir la función que está en THREAD ya definida.
-        @Override
-        public void run() {
-            try {
-            	DBConnection conn = new DBConnection();
-            	getProperties config = new getProperties("DB.properties");
-        		String query = config.obtenerPropiedad("query");
-            	conn.exeQuery(query);
-                    
-                   synchronized(Hilo.class) {
-                	    // SE USA SYNCHRONIZED PARA EVITAR CASOS DE MULTIPLES HILOS INTENTANDO ACCEDER AL INCREMENTO DE ESTE.
-                    	hilos_funcionando++;
-                    }
-            } catch (Error e) {
-            	// SE USA SYNCHRONIZED PARA EVITAR CASOS DE MULTIPLES HILOS INTENTANDO ACCEDER AL INCREMENTO DE ESTE.
-            	e.printStackTrace();
-            	synchronized(Hilo.class) {
-            		hilos_fallados++;	
-            	}                
-            }
-        }
-        
-        // OBTENER LOS HILOS QUE ESTAN FALLANDO.
-        public static int getHilosFallados() {
-        	int hilos_fallados_return = hilos_fallados;
-        	hilos_fallados=0;
-            return hilos_fallados_return;
-        }
-
-        public static int getHilosCompletados() {
-        	int hilos_completados_return = hilos_funcionando;
-        	hilos_funcionando=0;
-            return hilos_completados_return;
-        }
-    }
-	
 	public static void main(String[] args) {
 				
 			int[] cantidad_funcionando = new int[4];
@@ -53,12 +13,10 @@ static class Hilo extends Thread {
 			
 			
 			String numero_hilos = "1";
-			System.out.println("prueba 1");
 			
 			for (int i = 0; i<3; i++) {
 				times[i] -= System.currentTimeMillis();
 				numero_hilos+= "0";
-				System.out.println("prueba 2");
 				int numero_hilos_int = Integer.valueOf(numero_hilos);
 				
 				Hilo hilos[] = new Hilo[numero_hilos_int];
@@ -86,11 +44,11 @@ static class Hilo extends Thread {
 				
 			}
 			
-			try {
-				Thread.sleep(1500);
+			/*try {
+				Thread.sleep(0);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
+			}*/
 			
 
         	System.out.println("FUNCIONAMIENTOl " + "Completados " + " l " + "Fallados" + " l " + "Tiempo " + "(ms)");
