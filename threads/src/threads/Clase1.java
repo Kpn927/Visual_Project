@@ -1,6 +1,5 @@
 package threads;
 
-
 // Imports necesarios para la ejeccución con la base de datos //
 
 import java.sql.*;
@@ -69,7 +68,11 @@ static class Hilo extends Thread {
         }
     }
 	
-public static void main(String[] args) {
+	public static void main(String[] args) {
+		getProperties config = new getProperties("DB.properties");
+		String valor = config.obtenerPropiedad("user");
+		
+		System.out.println("El valor de miPropiedad es: " + valor);
 				
 			int[] cantidad_funcionando = new int[4];
 			int[] cantidad_fallados = new int[4];
