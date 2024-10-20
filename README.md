@@ -3,7 +3,7 @@ Estos archivos no deben ser modificados, solo se debe mantener la versión actua
 Para esto, utilicen los siguientes comandos de git:
 
 - git update-index --assume-unchanged threads/DB.properties
-- git update-index --assume-unchanged threads/.Classpath
+- git update-index --assume-unchanged threads/.classpath
 
 # .gitignore configuration
 Git debería registrar solo cambios de código a partir de ahora, así que si notan que otros 
