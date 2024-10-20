@@ -2,3 +2,5 @@
 threads/.classpath
 threads/bin/
 threads/bin/*
+threads/DB.properties
+
