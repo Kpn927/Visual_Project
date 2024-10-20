@@ -5,18 +5,27 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class getProperties {
+	
     private Properties propiedades;
 
     public getProperties(String rutaArchivo) {
+    	
         propiedades = new Properties();
-        try (FileInputStream fis = new FileInputStream(rutaArchivo)) {
-            propiedades.load(fis);
+        
+        try (FileInputStream archivo = new FileInputStream(rutaArchivo)) {
+        	
+            propiedades.load(archivo);
+            
         } catch (IOException e) {
-            e.printStackTrace();
+        	
+            System.out.println("ERROR: Leída del archivo tuvo un problema. ");
+            
         }
     }
 
-    public String obtenerPropiedad(String clave) {
-        return propiedades.getProperty(clave);
+    public String obtenerPropiedad(String propiedad) {
+    	
+        return propiedades.getProperty(propiedad);
+        
     }
 }

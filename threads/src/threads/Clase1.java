@@ -1,8 +1,5 @@
 package threads;
 
-// Imports necesarios para la ejeccución con la base de datos //
-
-
 public class Clase1 {
 	
 	public static void main(String[] args) {
@@ -14,26 +11,34 @@ public class Clase1 {
 			
 			String numero_hilos = "1";
 			
-			for (int i = 0; i<5; i++) {
+			for (int i = 0; i<3; i++) {
+				
 				times[i] -= System.currentTimeMillis();
-				numero_hilos+= "0";
+				numero_hilos += "0";
 				int numero_hilos_int = Integer.valueOf(numero_hilos);
 				
 				Hilo hilos[] = new Hilo[numero_hilos_int];
 				
 				for (int j = 0; j<numero_hilos_int;j++) {
+					
 					Hilo hilo = new Hilo();
 					hilo.start();
-					hilos[j]= hilo;
+					hilos[j] = hilo;
+					
 				}
 				
-				// uso de for each con arreglo de hilos para permitir
+				// uso de for each (por cada) con arreglo de hilos para permitir
 				// que terminen los hilos y luego continúe el código
+				
 				for (Hilo hilo : hilos) {
 					try {
+						
 						hilo.join();
+						
 		        	}catch(InterruptedException e) {
+		        		
 		        		e.printStackTrace();
+		        		
 		        	}
 				}
 				
