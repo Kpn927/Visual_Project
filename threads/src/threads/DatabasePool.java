@@ -102,7 +102,7 @@ public class DatabasePool {
 	public synchronized void returnConnection(Connection conn)
 	{
 		pool.add(conn);
-		notifyAll();
+		notifyAll(); 
 	}
 	
 	public synchronized void closeConnections()
