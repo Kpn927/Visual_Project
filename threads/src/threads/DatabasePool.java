@@ -15,6 +15,10 @@ public class DatabasePool {
 	private static DatabasePool object;
 	private static ArrayList<Connection> pool;
 	
+	public static int GetCounter() {
+		return contador;
+	}
+	
 	private DatabasePool(){
 		Properties config = new Properties();
 		
@@ -41,13 +45,14 @@ public class DatabasePool {
 		for (int i = 0; i < nic; i++)
 		{
 			try { 
-				pool.add(DBConnection()); 
+				pool.add(DBConnection());
 			}
 			catch (SQLException e) 
 			{ 
-				e.printStackTrace(); 
+				System.out.println("Error creando instancia"); 
 			}
 		}
+		System.out.println(contador);
 		
 	}
 	
@@ -66,7 +71,7 @@ public class DatabasePool {
 	
 	public synchronized Connection obtainConnection()
 	{
-		if (pool.isEmpty() && contador < nmc && contador >= nic)
+		if (pool.isEmpty() && contador < nmc )
 		{
 			for (int i = 0; i < nc;)
 			{
@@ -76,7 +81,7 @@ public class DatabasePool {
 					i++;
 				}
 				catch (SQLException e) { 
-					e.printStackTrace(); 
+					System.out.println("Error creando nuevas conexiones"); 
 				}
 			}
 		}
@@ -87,7 +92,7 @@ public class DatabasePool {
 				wait(); 
 			}
 			catch (InterruptedException e) { 
-				e.printStackTrace(); 
+				System.out.println("Error esperando hilos"); 
 			}
 		} 
 			
@@ -112,7 +117,7 @@ public class DatabasePool {
 					conn.close();
 			}
 			catch (SQLException e) { 
-				e.printStackTrace(); 
+				System.out.println("Error cerrando hilos"); 
 			}
 		}
 

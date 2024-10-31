@@ -28,9 +28,12 @@ public class ClasePrincipal {
 			
 			for(ConexionHilo Hilo : con)
 				Hilo.join();
+				pool.closeConnections();
+				System.out.println("Number of Threads: " + contador);
 			
-		} catch(IOException | InterruptedException e){ e.printStackTrace(); }
+		} catch(IOException | InterruptedException e){ System.out.println("Error en main");  }
 		
+		System.out.println(DatabasePool.GetCounter());
 	}
 
 }

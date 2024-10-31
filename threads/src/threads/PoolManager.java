@@ -36,7 +36,7 @@ public class PoolManager {
 	        }
 		}
 		catch (SQLException e) { 
-			e.printStackTrace(); 
+			System.out.println("Error corriendo hilos");  
 		}
 		finally 
 		{
