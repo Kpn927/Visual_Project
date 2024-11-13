@@ -7,17 +7,32 @@ public class DBComponent
 {
 	private static DatabasePool Pool = DatabasePool.getAttributes();
     private static String url, username, password, queryFile;
-
-    private static void loadConfig()
+    private static String [] urls, usernames, passwords;
+    public static int index;
+	
+	public static void loadConfig()
     {
     	try
     	{
+    		
             Properties cfg = new Properties();
             cfg.load(new FileInputStream ("DB.properties"));
-
+            
+            index = Integer.parseInt(cfg.getProperty("db.identify_database"));
+            
             url = cfg.getProperty("db.url");
+            urls = url.split(",");
+            url = urls[index];
+            
             username = cfg.getProperty("db.user");
+            usernames = username.split(",");
+            username = usernames[index];
+            
             password = cfg.getProperty("db.password");
+            passwords = password.split(",");
+            password = passwords[index];
+            
+
             queryFile = cfg.getProperty("db.queryFile");
     	}
     	catch (IOException e) { e.printStackTrace(); }
@@ -29,8 +44,12 @@ public class DBComponent
         {
             Properties cfg = new Properties();
             cfg.load(new FileInputStream (queryFile));
-
-            return cfg.getProperty(queryKey);
+            String query = cfg.getProperty(queryKey);
+            String[] queryChoose = query.split(",");
+            System.out.println(index);
+            String returnquery = queryChoose[index];
+            
+            return returnquery;
         } 
         catch (IOException e)
         {
