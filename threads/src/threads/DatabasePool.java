@@ -1,130 +1,91 @@
 package threads;
-
 import java.util.*;
-
 import java.io.*;
 import java.sql.*;
 
-public class DatabasePool {
-	
-	// NIC: NUMERO INICIAL DE CONEXIONES.
-	// NMC: NUMERO MAXIMO DE CONEXIONES.
-	// NC: NUMERO DE INCREMENTO.
-	private static int nic, nmc, nc, contador;
-	private static String url, user, password;
+public class DatabasePool
+{
+	private static int nic, nmc, nc, count;
 	private static DatabasePool object;
-	private static ArrayList<Connection> pool;
-	
-	public static int GetCounter() {
-		return contador;
-	}
-	
-	private DatabasePool(){
-		Properties config = new Properties();
+	private static ArrayList<Connection> poolList;
+
+	private DatabasePool()
+	{
+		Properties cfg = new Properties();
+				
+		try { cfg.load(new FileInputStream ("DB.properties")); }
+		catch (IOException e) { e.printStackTrace(); }
+
+		nic = Integer.parseInt(cfg.getProperty("pool.nic"));
+		nmc = Integer.parseInt(cfg.getProperty("pool.nmc"));
+		nc = Integer.parseInt(cfg.getProperty("pool.nc"));
 		
-		try {
-			
-			config.load(new FileInputStream ("DB.properties")); 
-			
-		}
-		catch (IOException e) { 
-			
-			e.printStackTrace(); 
-			
-		}
-		
-		url = config.getProperty("DBurl");
-		user = config.getProperty("user");
-		password = config.getProperty("password");
-		nic = Integer.parseInt(config.getProperty("nic"));
-		nmc = Integer.parseInt(config.getProperty("nmc"));
-		nc = Integer.parseInt(config.getProperty("nc"));
-		
-		pool = new ArrayList<Connection>(nic);
-		
+		poolList = new ArrayList<Connection>(nic);
+
 		for (int i = 0; i < nic; i++)
 		{
-			try { 
-				pool.add(DBConnection());
+			try
+			{
+				poolList.add(DBComponent.createConnection());
+				count++;
 			}
-			catch (SQLException e) 
-			{ 
-				System.out.println("Error creando instancia"); 
-			}
+			catch (SQLException | ClassNotFoundException e) { e.printStackTrace(); }
 		}
-		System.out.println(contador);
-		
 	}
-	
-	public Connection DBConnection() throws SQLException {
-		contador++;
-		return DriverManager.getConnection(url, user, password);
-		
-	}
-	
+
 	public static synchronized DatabasePool getAttributes()
 	{
 		if (object == null)
 			object = new DatabasePool();
+
 		return object;
 	}
-	
+    
 	public synchronized Connection obtainConnection()
 	{
-		if (pool.isEmpty() && contador < nmc )
+		if (poolList.isEmpty() && count < nmc && count >= nic)
 		{
 			for (int i = 0; i < nc;)
 			{
 				try
 				{
-					pool.add(DBConnection());
+					poolList.add(DBComponent.createConnection());
+					count++;
 					i++;
 				}
-				catch (SQLException e) { 
-					System.out.println("Error creando nuevas conexiones"); 
-				}
+				catch (SQLException | ClassNotFoundException e) { e.printStackTrace(); }
 			}
 		}
 			
-		while (pool.isEmpty())
+		while (poolList.isEmpty())
 		{
-			try { 
-				wait(); 
-			}
-			catch (InterruptedException e) { 
-				System.out.println("Error esperando hilos"); 
-			}
-		} 
+			try { wait(); }
+			catch (InterruptedException e) { e.printStackTrace(); }
+		}
 			
-		return pool.remove(pool.size() - 1);
+		return poolList.removeLast();
 	}
 	
 	public synchronized void returnConnection(Connection conn)
 	{
-		pool.add(conn);
-		notifyAll(); 
+		poolList.add(conn);
+		notifyAll();
 	}
-	
+
 	public synchronized void closeConnections()
 	{
-		System.out.println("Pool Size: " + pool.size());
+		System.out.println("Pool Size: " + poolList.size());
 
-		for (Connection conn : pool)
+		for (Connection conn : poolList)
 		{
 			try
 			{
 				if ((conn != null) && (!conn.isClosed()))
 					conn.close();
 			}
-			catch (SQLException e) { 
-				System.out.println("Error cerrando hilos"); 
-			}
+			catch (SQLException e) { e.printStackTrace(); }
 		}
 
-		pool.clear();
+		poolList.clear();
 	}
-	
-		
-		
-	
 }
