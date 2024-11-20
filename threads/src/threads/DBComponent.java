@@ -8,29 +8,27 @@ public class DBComponent
 	private static DatabasePool Pool = DatabasePool.getAttributes();
     private static String url, username, password, queryFile;
     private static String [] urls, usernames, passwords;
-    public static int index;
-	
+    private static Connection con = null;
+    
+    
 	public static void loadConfig()
     {
     	try
     	{
-    		
             Properties cfg = new Properties();
             cfg.load(new FileInputStream ("DB.properties"));
             
-            index = Integer.parseInt(cfg.getProperty("db.identify_database"));
-            
             url = cfg.getProperty("db.url");
             urls = url.split(",");
-            url = urls[index];
+            url = urls[Main.dbIndex];
             
             username = cfg.getProperty("db.user");
             usernames = username.split(",");
-            username = usernames[index];
+            username = usernames[Main.dbIndex];
             
             password = cfg.getProperty("db.password");
             passwords = password.split(",");
-            password = passwords[index];
+            password = passwords[Main.dbIndex];
             
 
             queryFile = cfg.getProperty("db.queryFile");
@@ -46,8 +44,7 @@ public class DBComponent
             cfg.load(new FileInputStream (queryFile));
             String query = cfg.getProperty(queryKey);
             String[] queryChoose = query.split(",");
-            System.out.println(index);
-            String returnquery = queryChoose[index];
+            String returnquery = queryChoose[Main.dbIndex];
             
             return returnquery;
         } 
@@ -82,12 +79,47 @@ public class DBComponent
 
     public synchronized void runQuery(String query) 
     {
-    	ConnClass.executeQuery(query);
-    	ConnClass.releaseConnection();
+    	executeQuery(query);
+    	releaseConnection();
     }
     
     public static synchronized void closeAllConnections()
     {
     	Pool.closeConnections();
+    }
+    
+    public static synchronized void executeQuery(String query)
+    {
+    	con = getConnection(con);
+
+		Statement st = null;
+		ResultSet rs = null;
+
+        try
+        {
+			st = con.createStatement();
+			rs = st.executeQuery(query);
+
+		    while (rs.next())
+		    {
+			   String product = rs.getString(2);
+			   System.out.println(product);
+		    }
+		}
+		catch (SQLException e) { e.printStackTrace(); }
+		finally 
+		{
+	       try { if (rs != null) rs.close(); } catch (SQLException e) { }
+	       try { if (st != null) st.close(); } catch (SQLException e) { }
+		}
+    }
+    
+    public static synchronized void releaseConnection()
+    {
+	   if (con != null)
+	   {
+	      DBComponent.returnConnection(con);
+	      con = null;
+	   }
     }
 }
